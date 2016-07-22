@@ -4,11 +4,10 @@ import time
 def stopwatch(my_function):
     def wrapper(*args, **kwargs):
         start = time.time()
-        sol = my_function(*args, **kwargs)
+        my_function(*args, **kwargs)
         end = time.time()
-        print(sol)
         print("======================")
-        print("Code excecuted in " + str(1000 * (end - start)) + " ms")
+        print("Code excecuted in {0} ms".format(1000 * (end - start))
 
     return wrapper
 
@@ -19,7 +18,7 @@ class Problem:
 
     @stopwatch
     def run(self):
-        return self.get_solution()
+        print(self.get_solution())
 
     def get_solution(self):
         pass
