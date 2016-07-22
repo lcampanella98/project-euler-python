@@ -82,3 +82,12 @@ def cmp_to_key(mycmp):
             return mycmp(self.obj, other.obj) != 0
 
     return K
+
+
+def d(self, n):
+    rt = int(math.sqrt(n))
+    dsum = rt if rt * rt == n else 1
+    for i in range(2, rt + 1):
+        if n % i == 0:
+            dsum += i + n // i
+    return dsum

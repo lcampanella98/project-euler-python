@@ -294,7 +294,7 @@ class Problem21(Problem):
         self._memo = [0] * limit
         amicable_sum = 0
         for i in range(0, limit):
-            self.d(i)
+            self._memo[i] = tools.d(i)
         for i in range(0, limit):
             try:
                 di = self._memo[i]
@@ -306,15 +306,6 @@ class Problem21(Problem):
             except IndexError:
                 pass
         return 'The sum of amicable numbers under {0} is {1}'.format(limit, amicable_sum)
-
-    def d(self, n):
-        rt = int(math.sqrt(n))
-        dsum = rt if rt * rt == n else 1
-        for i in range(2, rt + 1):
-            if n % i == 0:
-                dsum += i + n // i
-        self._memo[n] = dsum
-        return dsum
 
 
 class Problem22(Problem):
@@ -336,3 +327,16 @@ class Problem22(Problem):
             elif cx < cy:
                 return -1
         return -1
+
+
+class Problem23(Problem):
+
+    name = 'Non-abundant sums'
+
+    def get_solution(self):
+
+
+
+
+
+
