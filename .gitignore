@@ -48,3 +48,4 @@ Temporary Items
 
 # My Ignored Folders
 .idea/
+__pycache__/
