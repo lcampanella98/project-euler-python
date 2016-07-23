@@ -84,10 +84,47 @@ def cmp_to_key(mycmp):
     return K
 
 
-def d(self, n):
-    rt = int(math.sqrt(n))
-    dsum = rt if rt * rt == n else 1
-    for i in range(2, rt + 1):
-        if n % i == 0:
-            dsum += i + n // i
-    return dsum
+def sum_sequence(a0, d, n):
+    an = a0 + d * (n - 1)
+    return n * (a0 + an) / 2
+
+
+def prime_factorization(n, primes):
+    factorization = {}
+    if n == 1:
+        return factorization
+    i = 0
+    while n > 0 and i < len(primes):
+        p = primes[i]
+        if p > n:
+            break
+        if n % p == 0:
+            factorization[p] = 1
+            n //= p
+            while n % p == 0:
+                factorization[p] += 1
+                n //= p
+        i += 1
+    if len(factorization) == 0:
+        factorization[n] = 1
+    return factorization
+
+
+def sum_of_factors_prime(num, primes):
+    n = num
+    fsum = 1
+    p = primes[0]
+    i = 0
+    while p * p <= n and n > 1 and i < len(primes):
+        p = primes[i]
+        i += 1
+        if n % p == 0:
+            j = p * p
+            n //= p
+            while n * p == 0:
+                n *= p
+                n //= p
+            fsum *= (j - 1) // (p - 1)
+    if n > 1:
+        fsum *= n + 1
+    return fsum - num
