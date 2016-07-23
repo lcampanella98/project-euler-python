@@ -292,20 +292,14 @@ class Problem21(Problem):
     def get_solution(self):
         limit = 10000
         primes = esieve.get_primes(int(math.sqrt(limit) + 1))
-        self._memo = [0] * limit
         amicable_sum = 0
+
         for i in range(2, limit):
-            self._memo[i] = tools.sum_of_factors_prime(i, primes)
-        for i in range(2, limit):
-            try:
-                di = self._memo[i]
-                ddi = self._memo[di]
-                if i == ddi and i != di:
-                    print('d({0}) = {1}'.format(i, di))
-                    print('adding {0} to the sum'.format(i))
-                    amicable_sum += i
-            except IndexError:
-                pass
+            di = tools.sum_of_factors_prime(i, primes)
+            if di > i:
+                if tools.sum_of_factors_prime(di, primes) == i:
+                    amicable_sum += i + di
+
         return 'The sum of amicable numbers under {0} is {1}'.format(limit, amicable_sum)
 
 
@@ -339,23 +333,29 @@ class Problem23(Problem):
         primes = esieve.get_primes(limit)
         abundant_nums = []
 
-        for i in range(1, limit):
+        #  find all abundant numbers
+        for i in range(2, limit + 1):
             di = tools.sum_of_factors_prime(i, primes)
             if di > i:
                 abundant_nums.append(i)
-        can_be_written = set()
+
+        #  find all sums of two abundant numbers
+        sums_list = [False] * limit
         for i in range(0, len(abundant_nums)):
             ab1 = abundant_nums[i]
             for j in range(i, len(abundant_nums)):
-                isum = ab1 + abundant_nums[j]
-                if isum < limit:
-                    can_be_written.add(isum)
-                    pass
+                if ab1 + abundant_nums[j] < limit:
+                    sums_list[ab1 + abundant_nums[j]] = True
                 else:
                     break
-        zsum = int(tools.sum_sequence(1, 1, limit - 1))
 
-        return 'the sum of integers is {0}'.format(str(zsum - sum(can_be_written)))
+        #  sum all numbers < limit that cannot be written as a sum
+        non_abundant_sum = 0
+        for i in range(0, len(sums_list)):
+            if not sums_list[i]:
+                non_abundant_sum += i
+
+        return 'the sum of integers is {0}'.format(non_abundant_sum)
 
 
 

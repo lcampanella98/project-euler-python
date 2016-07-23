@@ -121,7 +121,7 @@ def sum_of_factors_prime(num, primes):
         if n % p == 0:
             j = p * p
             n //= p
-            while n * p == 0:
+            while n % p == 0:
                 j *= p
                 n //= p
             fsum *= (j - 1) // (p - 1)
