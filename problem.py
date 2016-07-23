@@ -7,7 +7,7 @@ def stopwatch(my_function):
         my_function(*args, **kwargs)
         end = time.time()
         print("======================")
-        print("Code excecuted in {0} ms".format(1000 * (end - start))
+        print("Code excecuted in {0} ms".format(1000 * (end - start)))
 
     return wrapper
 

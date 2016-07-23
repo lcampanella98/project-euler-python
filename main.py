@@ -15,12 +15,13 @@ for t in cls_members:
 all_problems.sort()
 print('\nProject Euler Problems:\n')
 cols = 4
-for i in range(0, int(math.ceil(len(all_problems) / cols))):
+for i in range(0, len(all_problems) // cols + 1):
     line = []
     j = i
+    inc = len(all_problems) // cols + 1
     while j < len(all_problems):
         line.append(str(all_problems[j]))
-        j += cols - 1
+        j += inc
     print('\t\t'.join(line))
 
 no_choice = True

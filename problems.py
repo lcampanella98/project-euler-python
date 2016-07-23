@@ -1,7 +1,7 @@
 from problem import Problem
 import math
 import tools
-import ESieve
+import esieve
 import os
 import io
 import re
@@ -91,7 +91,7 @@ class Problem10(Problem):
     name = 'Summation of primes'
 
     def get_solution(self):
-        return str(sum(ESieve.esieve(0, 2000000)))
+        return str(sum(esieve.get_primes(0, 2000000)))
 
 
 def triangle_generator():
@@ -291,11 +291,12 @@ class Problem21(Problem):
 
     def get_solution(self):
         limit = 10000
+        primes = esieve.get_primes(int(math.sqrt(limit) + 1))
         self._memo = [0] * limit
         amicable_sum = 0
-        for i in range(0, limit):
-            self.d(i)
-        for i in range(0, limit):
+        for i in range(2, limit):
+            self._memo[i] = tools.sum_of_factors_prime(i, primes)
+        for i in range(2, limit):
             try:
                 di = self._memo[i]
                 ddi = self._memo[di]
@@ -306,15 +307,6 @@ class Problem21(Problem):
             except IndexError:
                 pass
         return 'The sum of amicable numbers under {0} is {1}'.format(limit, amicable_sum)
-
-    def d(self, n):
-        rt = int(math.sqrt(n))
-        dsum = rt if rt * rt == n else 1
-        for i in range(2, rt + 1):
-            if n % i == 0:
-                dsum += i + n // i
-        self._memo[n] = dsum
-        return dsum
 
 
 class Problem22(Problem):
@@ -336,3 +328,36 @@ class Problem22(Problem):
             elif cx < cy:
                 return -1
         return -1
+
+
+class Problem23(Problem):
+
+    name = 'Non-abundant sums'
+
+    def get_solution(self):
+        limit = 28123
+        primes = esieve.get_primes(limit)
+        abundant_nums = []
+
+        for i in range(1, limit):
+            di = tools.sum_of_factors_prime(i, primes)
+            if di > i:
+                abundant_nums.append(i)
+        can_be_written = set()
+        for i in range(0, len(abundant_nums)):
+            ab1 = abundant_nums[i]
+            for j in range(i, len(abundant_nums)):
+                isum = ab1 + abundant_nums[j]
+                if isum < limit:
+                    can_be_written.add(isum)
+                    pass
+                else:
+                    break
+        zsum = int(tools.sum_sequence(1, 1, limit - 1))
+
+        return 'the sum of integers is {0}'.format(str(zsum - sum(can_be_written)))
+
+
+
+
+

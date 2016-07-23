@@ -1,7 +1,7 @@
 import math
 
 
-def esieve(floor, ceiling):
+def get_primes(ceiling, floor=2):
     flags = [True] * (ceiling+1)
     primes = []
     flags[0] = False
@@ -16,4 +16,3 @@ def esieve(floor, ceiling):
         if flags[i]:
             primes.append(i)
     return primes
-
