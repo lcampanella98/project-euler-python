@@ -308,9 +308,22 @@ class Problem22(Problem):
     name = 'Names scores'
 
     def get_solution(self):
+        score_total = 0
         with io.open(os.path.join(os.getcwd(), r'resources\p022_names.txt')) as f:
             names = list(map(lambda x: re.sub(r'"', '', x), f.readline().split(',')))
         names.sort(key=tools.cmp_to_key(Problem22.letter_cmp))
+
+        for i in range(0, len(names)):
+            score_total += Problem22.name_points(names[i]) * (i + 1)
+        return 'The total score is {0}'.format(score_total)
+
+    @staticmethod
+    def name_points(name):
+        a_val = ord('A')
+        pts = 0
+        for c in name:
+            pts += ord(c) - a_val + 1
+        return pts
 
     @staticmethod
     def letter_cmp(x, y):
