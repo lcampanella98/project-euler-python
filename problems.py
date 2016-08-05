@@ -1,14 +1,13 @@
-from problem import Problem
-import math
-import tools
-import esieve
-import os
 import io
+import math
+import os
 import re
+
+from problem import Problem
+from tools import tools, esieve, permutation
 
 
 class Problem8(Problem):
-
     name = 'Largest product in a series'
 
     @staticmethod
@@ -44,7 +43,7 @@ class Problem8(Problem):
                 if lastnum != 0:
                     prod //= lastnum
                 else:
-                    prod = self._prod(map(lambda x: int(x), number[i-num_adj_digits+1:i]))
+                    prod = self._prod(map(lambda x: int(x), number[i - num_adj_digits + 1:i]))
                 counter -= 1
             prod *= int(number[i])
             counter += 1
@@ -52,7 +51,6 @@ class Problem8(Problem):
 
 
 class Problem9(Problem):
-
     name = 'Special Pythagorean triplet'
 
     def get_solution(self):
@@ -87,7 +85,6 @@ class Problem9(Problem):
 
 
 class Problem10(Problem):
-
     name = 'Summation of primes'
 
     def get_solution(self):
@@ -104,7 +101,6 @@ def triangle_generator():
 
 
 class Problem12(Problem):
-
     name = 'Highly divisible triangular number'
 
     def get_solution(self):
@@ -115,7 +111,6 @@ class Problem12(Problem):
 
 
 class Problem13(Problem):
-
     name = 'Large sum'
 
     def get_solution(self):
@@ -124,7 +119,6 @@ class Problem13(Problem):
 
 
 class Problem14(Problem):
-
     name = 'Longest Collatz sequence'
 
     def get_solution(self):
@@ -152,7 +146,6 @@ class Problem14(Problem):
 
 
 class Problem16(Problem):
-
     name = 'Power digit sum'
 
     def get_solution(self):
@@ -164,7 +157,7 @@ class Problem16(Problem):
         n = base
         cp = 1
         while cp != power:
-            if 2*cp <= power:
+            if 2 * cp <= power:
                 n *= n
                 cp *= 2
             else:
@@ -174,7 +167,6 @@ class Problem16(Problem):
 
 
 class Problem17(Problem):
-
     name = 'Number letter counts'
 
     _one_to_nine = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
@@ -221,7 +213,6 @@ class Problem17(Problem):
 
 
 class Problem18(Problem):
-
     name = 'Maximum path sum I'
 
     def get_solution(self):
@@ -229,12 +220,11 @@ class Problem18(Problem):
             lines = list(map(lambda x: list(map(lambda y: int(y), x.split(' '))), f.readlines()))
         for i in range(len(lines) - 1, 0, -1):
             for j in range(0, len(lines[i]) - 1):
-                lines[i-1][j] += max(lines[i][j], lines[i][j+1])
+                lines[i - 1][j] += max(lines[i][j], lines[i][j + 1])
         return str(lines[0][0])
 
 
 class Problem19(Problem):
-
     name = 'Counting Sundays'
 
     def get_solution(self):
@@ -257,7 +247,6 @@ class Problem19(Problem):
 
 
 class Problem100(Problem):
-
     name = 'Arranged probability'
 
     def get_solution(self):
@@ -274,7 +263,6 @@ class Problem100(Problem):
 
 
 class Problem20(Problem):
-
     name = 'Factorial Digit Sum'
 
     def get_solution(self):
@@ -283,7 +271,6 @@ class Problem20(Problem):
 
 
 class Problem21(Problem):
-
     name = 'Amicable numbers'
 
     def __init__(self):
@@ -304,7 +291,6 @@ class Problem21(Problem):
 
 
 class Problem22(Problem):
-
     name = 'Names scores'
 
     def get_solution(self):
@@ -338,7 +324,6 @@ class Problem22(Problem):
 
 
 class Problem23(Problem):
-
     name = 'Non-abundant sums'
 
     def get_solution(self):
@@ -352,7 +337,7 @@ class Problem23(Problem):
             if di > i:
                 abundant_nums.append(i)
 
-        #  find all sums of two abundant numbers
+        # find all sums of two abundant numbers
         sums_list = [False] * limit
         for i in range(0, len(abundant_nums)):
             ab1 = abundant_nums[i]
@@ -362,7 +347,7 @@ class Problem23(Problem):
                 else:
                     break
 
-        #  sum all numbers < limit that cannot be written as a sum
+        # sum all numbers < limit that cannot be written as a sum
         non_abundant_sum = 0
         for i in range(0, len(sums_list)):
             if not sums_list[i]:
@@ -371,6 +356,11 @@ class Problem23(Problem):
         return 'the sum of integers is {0}'.format(non_abundant_sum)
 
 
+class Problem24(Problem):
+    name = 'Lexicographic Permutations'
 
-
-
+    def get_solution(self):
+        num = 10
+        i = 1000000
+        permutations = permutation.Permutation(num).permute(i)
+        return str(permutations[i - 1])
