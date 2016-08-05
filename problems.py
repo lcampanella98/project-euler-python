@@ -364,3 +364,59 @@ class Problem24(Problem):
         i = 1000000
         permutations = permutation.Permutation(num).permute(i)
         return str(permutations[i - 1])
+
+
+class Problem25(Problem):
+    name = '1000-digit Fibonacci Number'
+
+    def get_solution(self):
+        target_digits = 1000
+        index = 3
+        terms = []
+        to_store = 150
+        fm1 = 1
+        fm2 = 1
+        while True:
+            f = fm1 + fm2
+            if len(terms) < to_store:
+                terms.append(f)
+            else:
+                if tools.num_digits(f) >= target_digits:
+                    for i, t in enumerate(terms):
+                        if tools.num_digits(t) == target_digits:
+                            return 'The index of first fib term to contain 1000 digits is {0}'.format(index - len(terms) + i)
+                else:
+                    terms.clear()
+            fm2 = fm1
+            fm1 = f
+            index += 1
+
+        return 'not found'
+
+
+class Problem26(Problem):
+    name = 'Reciprocal Cycles'
+
+    def get_solution(self):
+        longest_d = 0
+        longest_recurring_cycle_ct = 0
+        for d in range(2, 1000):
+            remainders = []
+            r = 1
+            while True:
+                while r < d:
+                    r *= 10
+                qd = r // d
+                r -= d * qd
+                if r == 0:
+                    break
+                elif r in remainders:
+                    ccount = len(remainders) - remainders.index(r)
+                    if longest_recurring_cycle_ct < ccount:
+                        longest_recurring_cycle_ct = ccount
+                        longest_d = d
+                    break
+                else:
+                    remainders.append(r)
+        return "The denominator less than 1000 with the longest reciprocal count was {0} with a cycle count of {1} "\
+            .format(longest_d, longest_recurring_cycle_ct)

@@ -31,6 +31,10 @@ def is_square(apositiveint):
     return True
 
 
+def num_digits(n):
+    return int(math.floor(math.log10(n)) + 1)
+
+
 def isqrt(n):
     x = n
     y = (x + 1) // 2
