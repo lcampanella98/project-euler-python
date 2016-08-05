@@ -2,7 +2,6 @@ import problems
 import sys
 import inspect
 import re
-import math
 
 
 cls_members = inspect.getmembers(sys.modules[problems.__name__], inspect.isclass)
