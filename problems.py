@@ -399,6 +399,7 @@ class Problem26(Problem):
 
     def get_solution(self):
         longest_d = 0
+
         longest_recurring_cycle_ct = 0
         for d in range(2, 1000):
             remainders = []
@@ -420,3 +421,40 @@ class Problem26(Problem):
                     remainders.append(r)
         return "The denominator less than 1000 with the longest reciprocal count was {0} with a cycle count of {1} "\
             .format(longest_d, longest_recurring_cycle_ct)
+
+
+class Problem33(Problem):
+    name = 'Digit Cancelling Fractions'
+
+    def get_solution(self):
+        dtotal = 1
+        ntotal = 1
+        for d in range(10, 100):
+            dmod10 = d % 10
+            dover10 = d // 10
+            if dmod10 == 0:
+                continue
+            for n in range(10, d):
+                nmod10 = n % 10
+                nover10 = n // 10
+                n1 = 1
+                d1 = 1
+                if nmod10 == 0:
+                    continue
+                if dmod10 == nover10:
+                    n1 = nmod10
+                    d1 = dover10
+                elif dmod10 == nmod10:
+                    n1 = nover10
+                    d1 = dover10
+                elif dover10 == nmod10:
+                    n1 = nover10
+                    d1 = dmod10
+                elif dover10 == nover10:
+                    n1 = nmod10
+                    d1 = dmod10
+                if tools.are_lists_equal(tools.simplify_fraction(n, d), tools.simplify_fraction(n1, d1)):
+                    print('{0}/{1} reduced to {2}/{3}'.format(n, d, n1, d1))
+                    ntotal *= n
+                    dtotal *= d
+        return 'The result is: {0}'.format(tools.simplify_fraction(ntotal, dtotal)[1])

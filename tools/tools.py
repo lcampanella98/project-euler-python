@@ -12,6 +12,19 @@ def get_divisor_count(num):
     return dcount
 
 
+def simplify_fraction(n, d):
+    gcd = math.gcd(n, d)
+    return [n // gcd, d // gcd]
+
+
+def are_lists_equal(l1, l2):
+    if len(l1) != len(l2):
+        return False
+    for i in range(len(l1)):
+        if l1[i] != l2[i]:
+            return False
+    return True
+
 def digit_sum(num):
     s = 0
     while num > 0:
