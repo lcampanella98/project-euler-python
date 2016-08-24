@@ -4,7 +4,7 @@ import os
 import re
 
 from problem import Problem
-from tools import tools, esieve, permutation
+from tools import tools, esieve, permutation, digit_num
 
 
 class Problem8(Problem):
@@ -423,6 +423,13 @@ class Problem26(Problem):
             .format(longest_d, longest_recurring_cycle_ct)
 
 
+class Problem27(Problem):
+    name = 'Quadratic Primes'
+
+    def get_solution(self):
+        pass
+
+
 class Problem33(Problem):
     name = 'Digit Cancelling Fractions'
 
@@ -458,3 +465,51 @@ class Problem33(Problem):
                     ntotal *= n
                     dtotal *= d
         return 'The result is: {0}'.format(tools.simplify_fraction(ntotal, dtotal)[1])
+
+
+class Problem34(Problem):
+    name = 'Digit Factorials'
+
+    def get_solution(self):
+        lim = 2540160
+        total_sum = 0
+        facts = list(map(lambda x: tools.factorial(x), (i for i in range(10))))
+        digits = digit_num.DigitNum(10)
+        for n in range(10, lim):
+            if n == sum(facts[d] for d in digits.digits):
+                total_sum += n
+            digits.increment()
+        return 'The sum of all digit factorials is {0}'.format(total_sum)
+
+
+class Problem35(Problem):
+    name = 'Circular Primes'
+
+    def get_solution(self):
+        num_circular = 0
+        primes = esieve.get_primes(1000000)
+
+        for p in primes:
+            pr = tools.rotate(p)
+            while pr != p:
+                if not tools.is_prime(pr):
+                    break
+                pr = tools.rotate(pr)
+            if pr == p:
+                num_circular += 1
+        return 'There are {0} circular primes below 1000000'.format(num_circular)
+
+
+class Problem36(Problem):
+    name = 'Double-Base Palindromes'
+
+    def get_solution(self):
+        lim = 1000000
+        p_sum = 0
+        print(tools.is_palindrome_binary(int('11110001111', base=2)))
+        for i in range(1, lim):
+            if tools.is_palindrome(i):
+                if tools.is_palindrome_binary(i):
+                    p_sum += i
+
+        return 'The sum of all double-base palindromes < 1000000 is {0}'.format(p_sum)
