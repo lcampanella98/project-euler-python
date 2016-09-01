@@ -513,3 +513,95 @@ class Problem36(Problem):
                     p_sum += i
 
         return 'The sum of all double-base palindromes < 1000000 is {0}'.format(p_sum)
+
+
+class Problem37(Problem):
+    name = 'Truncatable Primes'
+    lpds = [2, 3, 5, 7]
+    rpds = [3, 7]
+    ods = [1, 3, 7, 9]
+
+    def __init__(self):
+        self.t_primes = []
+
+    def insert_next(self, n):
+        if not tools.is_prime(n // 10):
+            return
+        is_t_prime = True
+        for t in tools.truncate_to_right(n):
+            if not tools.is_prime(t):
+                is_t_prime = False
+                break
+        if is_t_prime:
+            self.t_primes.append(n)
+        nmod10 = n % 10
+        for od in self.ods:
+            self.insert_next(10 * (n - nmod10 + od) + nmod10)
+
+    def get_solution(self):
+        for pdright in self.rpds:
+            for pdleft in self.lpds:
+                n = 10 * pdleft + pdright
+                self.insert_next(n)
+        print(self.t_primes)
+        return 'The sum of truncatable primes is {0}'.format(sum(self.t_primes))
+
+
+class Problem38(Problem):
+    name = 'Pandigital Multiples'
+
+    def get_solution(self):
+        base_num = 98765432
+        largest_pandigital = 0
+        starting_num = 0
+        floor = 123456789
+        ceil = 987654321
+        while base_num > 0:
+            base_num_digits = tools.num_digits(base_num)
+            base_limit = int(math.floor(math.pow(10, base_num_digits - 1)))
+            print('{0}, {1}'.format(base_num, base_limit))
+            for num in range(base_num, 9 * base_limit, -1):
+                if num % 5 == 0:
+                    continue
+                m = num
+                con = num
+                while con < floor:
+                    m += num
+                    con = con * int(math.pow(10, tools.num_digits(m))) + m
+
+                if con <= ceil:
+                    if tools.is_1_to_9_pandigital(con):
+                        print('{0} -> {1}'.format(num, con))
+                        if con > largest_pandigital:
+                            largest_pandigital = con
+                            starting_num = num
+            base_num //= 10
+
+        return 'The largest pandigital multiple is {0} with a starting numner of {1}'.format(largest_pandigital, starting_num)
+
+
+class Problem40(Problem):
+    name = 'Champerown\'s Constant'
+
+    def get_solution(self):
+        curr_n = 1
+        lim_num_n = 7
+        num_n = 0
+        d = 0
+        num_d = 0
+        d_inc = 0
+        mod = 1
+        total = 1
+        while num_n < lim_num_n:
+            d += 1
+            if d % mod == 0:
+                d_inc += 1
+                mod *= 10
+            num_d += d_inc
+            if num_d >= curr_n:
+                d_list = tools.get_digits(d)
+                curr_d = d_list[len(d_list) - 1 - (num_d - curr_n)]
+                total *= curr_d
+                curr_n *= 10
+                num_n += 1
+        return total

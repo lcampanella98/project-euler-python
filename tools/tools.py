@@ -26,6 +26,21 @@ def is_prime(n):
     return True
 
 
+def truncate_to_left(n):
+    while n > 0:
+        yield n
+        n //= 10
+
+
+def truncate_to_right(n):
+    yield n
+    mod = int(math.pow(10, num_digits(n) - 1))
+    while mod > 1:
+        n %= mod
+        mod //= 10
+        yield n
+
+
 def is_palindrome(n):
     nd = num_digits(n)
     digits = []
@@ -216,5 +231,17 @@ def sum_of_factors_prime(num, primes):
     return fsum - num
 
 
-def made_a_random_function():
-    pass
+def is_1_to_9_pandigital(n):
+    digits = [False] * 9
+    while n > 0:
+        lastd = n % 10
+        if lastd == 0:
+            return False
+        if digits[lastd - 1]:
+            return False
+        digits[lastd - 1] = True
+        n //= 10
+    for d in digits:
+        if not d:
+            return False
+    return True
