@@ -12,6 +12,95 @@ def get_divisor_count(num):
     return dcount
 
 
+def simplify_fraction(n, d):
+    gcd = math.gcd(n, d)
+    return [n // gcd, d // gcd]
+
+
+def is_prime(n):
+    if n <= 1:
+        return False
+    for i in range(2, int(math.sqrt(n)) + 1):
+        if n % i == 0:
+            return False
+    return True
+
+
+def truncate_to_left(n):
+    while n > 0:
+        yield n
+        n //= 10
+
+
+def truncate_to_right(n):
+    yield n
+    mod = int(math.pow(10, num_digits(n) - 1))
+    while mod > 1:
+        n %= mod
+        mod //= 10
+        yield n
+
+
+def is_palindrome(n):
+    nd = num_digits(n)
+    digits = []
+    for _ in range(nd // 2):
+        digits.append(n % 10)
+        n //= 10
+    if nd % 2 == 1:
+        n //= 10
+    for d in reversed(digits):
+        if n % 10 != d:
+            return False
+        n //= 10
+    return True
+
+
+def is_palindrome_binary(b):
+    m = 0
+    nd = num_digits(b, 2)
+    for i in range(nd // 2):
+        m = (m << 1) + (b & 1)
+        b >>= 1
+    if nd % 2 == 1:
+        b >>= 1
+    for _ in range(nd // 2):
+        if b & 1 != m & 1:
+            return False
+        b >>= 1
+        m >>= 1
+    return True
+
+
+def rotate(n):
+    l = n % 10
+    r = n // 10
+    n = r
+    m = 1
+    while n > 0:
+        m *= 10
+        n //= 10
+    return m * l + r
+
+
+def are_lists_equal(l1, l2):
+    if len(l1) != len(l2):
+        return False
+    for i in range(len(l1)):
+        if l1[i] != l2[i]:
+            return False
+    return True
+
+
+def get_digits(n):
+    digits = [n % 10]
+    n //= 10
+    while n > 0:
+        digits.insert(0, n % 10)
+        n //= 10
+    return digits
+
+
 def digit_sum(num):
     s = 0
     while num > 0:
@@ -31,8 +120,14 @@ def is_square(apositiveint):
     return True
 
 
-def num_digits(n):
-    return int(math.floor(math.log10(n)) + 1)
+def num_digits(n, base=10):
+    if base == 10:
+        l = math.log10(n)
+    elif base == 2:
+        l = math.log2(n)
+    else:
+        l = math.log(n, base)
+    return int(math.floor(l) + 1)
 
 
 def isqrt(n):
@@ -53,6 +148,8 @@ def is_odd(n):
 
 
 def factorial(n):
+    if n == 0:
+        return 1
     fact = n
     while n > 1:
         n -= 1
@@ -134,5 +231,17 @@ def sum_of_factors_prime(num, primes):
     return fsum - num
 
 
-def made_a_random_function():
-    pass
+def is_1_to_9_pandigital(n):
+    digits = [False] * 9
+    while n > 0:
+        lastd = n % 10
+        if lastd == 0:
+            return False
+        if digits[lastd - 1]:
+            return False
+        digits[lastd - 1] = True
+        n //= 10
+    for d in digits:
+        if not d:
+            return False
+    return True

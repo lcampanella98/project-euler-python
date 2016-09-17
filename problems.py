@@ -4,7 +4,7 @@ import os
 import re
 
 from problem import Problem
-from tools import tools, esieve, permutation
+from tools import tools, esieve, permutation, digit_num
 
 
 class Problem8(Problem):
@@ -399,6 +399,7 @@ class Problem26(Problem):
 
     def get_solution(self):
         longest_d = 0
+
         longest_recurring_cycle_ct = 0
         for d in range(2, 1000):
             remainders = []
@@ -420,3 +421,187 @@ class Problem26(Problem):
                     remainders.append(r)
         return "The denominator less than 1000 with the longest reciprocal count was {0} with a cycle count of {1} "\
             .format(longest_d, longest_recurring_cycle_ct)
+
+
+class Problem27(Problem):
+    name = 'Quadratic Primes'
+
+    def get_solution(self):
+        pass
+
+
+class Problem33(Problem):
+    name = 'Digit Cancelling Fractions'
+
+    def get_solution(self):
+        dtotal = 1
+        ntotal = 1
+        for d in range(10, 100):
+            dmod10 = d % 10
+            dover10 = d // 10
+            if dmod10 == 0:
+                continue
+            for n in range(10, d):
+                nmod10 = n % 10
+                nover10 = n // 10
+                n1 = 1
+                d1 = 1
+                if nmod10 == 0:
+                    continue
+                if dmod10 == nover10:
+                    n1 = nmod10
+                    d1 = dover10
+                elif dmod10 == nmod10:
+                    n1 = nover10
+                    d1 = dover10
+                elif dover10 == nmod10:
+                    n1 = nover10
+                    d1 = dmod10
+                elif dover10 == nover10:
+                    n1 = nmod10
+                    d1 = dmod10
+                if tools.are_lists_equal(tools.simplify_fraction(n, d), tools.simplify_fraction(n1, d1)):
+                    print('{0}/{1} reduced to {2}/{3}'.format(n, d, n1, d1))
+                    ntotal *= n
+                    dtotal *= d
+        return 'The result is: {0}'.format(tools.simplify_fraction(ntotal, dtotal)[1])
+
+
+class Problem34(Problem):
+    name = 'Digit Factorials'
+
+    def get_solution(self):
+        lim = 2540160
+        total_sum = 0
+        facts = list(map(lambda x: tools.factorial(x), (i for i in range(10))))
+        digits = digit_num.DigitNum(10)
+        for n in range(10, lim):
+            if n == sum(facts[d] for d in digits.digits):
+                total_sum += n
+            digits.increment()
+        return 'The sum of all digit factorials is {0}'.format(total_sum)
+
+
+class Problem35(Problem):
+    name = 'Circular Primes'
+
+    def get_solution(self):
+        num_circular = 0
+        primes = esieve.get_primes(1000000)
+
+        for p in primes:
+            pr = tools.rotate(p)
+            while pr != p:
+                if not tools.is_prime(pr):
+                    break
+                pr = tools.rotate(pr)
+            if pr == p:
+                num_circular += 1
+        return 'There are {0} circular primes below 1000000'.format(num_circular)
+
+
+class Problem36(Problem):
+    name = 'Double-Base Palindromes'
+
+    def get_solution(self):
+        lim = 1000000
+        p_sum = 0
+        print(tools.is_palindrome_binary(int('11110001111', base=2)))
+        for i in range(1, lim):
+            if tools.is_palindrome(i):
+                if tools.is_palindrome_binary(i):
+                    p_sum += i
+
+        return 'The sum of all double-base palindromes < 1000000 is {0}'.format(p_sum)
+
+
+class Problem37(Problem):
+    name = 'Truncatable Primes'
+    lpds = [2, 3, 5, 7]
+    rpds = [3, 7]
+    ods = [1, 3, 7, 9]
+
+    def __init__(self):
+        self.t_primes = []
+
+    def insert_next(self, n):
+        if not tools.is_prime(n // 10):
+            return
+        is_t_prime = True
+        for t in tools.truncate_to_right(n):
+            if not tools.is_prime(t):
+                is_t_prime = False
+                break
+        if is_t_prime:
+            self.t_primes.append(n)
+        nmod10 = n % 10
+        for od in self.ods:
+            self.insert_next(10 * (n - nmod10 + od) + nmod10)
+
+    def get_solution(self):
+        for pdright in self.rpds:
+            for pdleft in self.lpds:
+                n = 10 * pdleft + pdright
+                self.insert_next(n)
+        print(self.t_primes)
+        return 'The sum of truncatable primes is {0}'.format(sum(self.t_primes))
+
+
+class Problem38(Problem):
+    name = 'Pandigital Multiples'
+
+    def get_solution(self):
+        base_num = 98765432
+        largest_pandigital = 0
+        starting_num = 0
+        floor = 123456789
+        ceil = 987654321
+        while base_num > 0:
+            base_num_digits = tools.num_digits(base_num)
+            base_limit = int(math.floor(math.pow(10, base_num_digits - 1)))
+            print('{0}, {1}'.format(base_num, base_limit))
+            for num in range(base_num, 9 * base_limit, -1):
+                if num % 5 == 0:
+                    continue
+                m = num
+                con = num
+                while con < floor:
+                    m += num
+                    con = con * int(math.pow(10, tools.num_digits(m))) + m
+
+                if con <= ceil:
+                    if tools.is_1_to_9_pandigital(con):
+                        print('{0} -> {1}'.format(num, con))
+                        if con > largest_pandigital:
+                            largest_pandigital = con
+                            starting_num = num
+            base_num //= 10
+
+        return 'The largest pandigital multiple is {0} with a starting numner of {1}'.format(largest_pandigital, starting_num)
+
+
+class Problem40(Problem):
+    name = 'Champerown\'s Constant'
+
+    def get_solution(self):
+        curr_n = 1
+        lim_num_n = 7
+        num_n = 0
+        d = 0
+        num_d = 0
+        d_inc = 0
+        mod = 1
+        total = 1
+        while num_n < lim_num_n:
+            d += 1
+            if d % mod == 0:
+                d_inc += 1
+                mod *= 10
+            num_d += d_inc
+            if num_d >= curr_n:
+                d_list = tools.get_digits(d)
+                curr_d = d_list[len(d_list) - 1 - (num_d - curr_n)]
+                total *= curr_d
+                curr_n *= 10
+                num_n += 1
+        return total
