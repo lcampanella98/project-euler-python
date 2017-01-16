@@ -101,6 +101,15 @@ def get_digits(n):
     return digits
 
 
+def get_num(digits):
+    n = 0
+    m = 1
+    for d in reversed(digits):
+        n += m * d
+        m *= 10
+    return n
+
+
 def digit_sum(num):
     s = 0
     while num > 0:
@@ -116,8 +125,19 @@ def is_square(apositiveint):
         x = (x + (apositiveint // x)) // 2
         if x in seen:
             return False
-    seen.add(x)
+        seen.add(x)
     return True
+
+
+def is_square_get(apositiveint):
+    x = apositiveint // 2
+    seen = {x}
+    while x * x != apositiveint:
+        x = (x + (apositiveint // x)) // 2
+        if x in seen:
+            return None
+        seen.add(x)
+    return x
 
 
 def num_digits(n, base=10):
@@ -245,3 +265,28 @@ def is_1_to_9_pandigital(n):
         if not d:
             return False
     return True
+
+
+def num_distinct_prime_factors(n, primes):
+    num_dpf = 0
+    pi = 0
+    while n > 1:
+        p = primes[pi]
+        if n % p == 0:
+            num_dpf += 1
+            n //= p
+        while n % p == 0:
+            n //= p
+        pi += 1
+    return num_dpf
+
+
+def is_perm(m, n):
+    ml, nl = set(), set()
+    while m > 0:
+        ml.add(m % 10)
+        m //= 10
+    while n > 0:
+        nl.add(n % 10)
+        n //= 10
+    return ml == nl

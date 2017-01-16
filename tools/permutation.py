@@ -36,6 +36,42 @@ class Permutation:
             j -= 1
 
     def swap(self, i, j):
-        temp = self.value[i]
+        t = self.value[i]
         self.value[i] = self.value[j]
-        self.value[j] = temp
+        self.value[j] = t
+
+
+class DescendingPermutation:
+
+    def __init__(self, a):
+        self.a = a
+
+    def get_next(self):
+        len_a = len(self.a)
+        i = len_a - 1
+        while i > 0 and self.a[i - 1] <= self.a[i]:
+            i -= 1
+
+        if i <= 0:
+            return False
+
+        j = len_a - 1
+        while self.a[j] >= self.a[i - 1]:
+            j -= 1
+
+        self.swap(i - 1, j)
+
+        self.reverse(i, len_a - 1)
+
+        return True
+
+    def reverse(self, i, j):
+        while i < j:
+            self.swap(i, j)
+            i += 1
+            j -= 1
+
+    def swap(self, i, j):
+        t = self.a[i]
+        self.a[i] = self.a[j]
+        self.a[j] = t
